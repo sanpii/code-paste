@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="/delete/{{ snippet.id }}">
+        <input type="hidden" name="_method" value="delete" />
+        <h2>
+            Are you sure delete snippet:
+            "{{ snippet.title }}" ?
+        </h2>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Yes</button>
+            <a class="btn" href="/show/{{ snippet.id }}">No</a>
+        </div>
+    </form>
+{% endblock %}

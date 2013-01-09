@@ -74,4 +74,32 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     return $app->redirect("/show/{$snippet->id}");
 });
 
+$app->get('/delete/{id}', function($id) use($app) {
+    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
+        ->findByPk(array('id' => $id));;
+    if (is_null($snippet)) {
+        return new Response("Snippet $id not found", 404);
+    }
+
+    return $app['twig']->render(
+        'delete.html.twig',
+        array(
+            'snippet' => $snippet->extract(),
+        )
+    );
+});
+
+$app->delete('/delete/{id}', function($id) use($app) {
+    $map = $app['pomm']->getMapFor('\Model\Snippet');
+
+    $snippet = $map->findByPk(array('id' => $id));;
+    if (is_null($snippet)) {
+        return new Response("Snippet $id not found", 404);
+    }
+
+    $map->deleteOne($snippet);
+
+    return $app->redirect('/');
+});
+
 return $app;
