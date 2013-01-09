@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <form method="post" action="/edit/{{ snippet.id }}">
+        <input type="hidden" name="_method" value="put" />
+        <input type="hidden" name="snippet[id]" value="{{ snippet.id }}" />
+
+        <label for="snippet[title]">Title:</label>
+        <input type="text" name="snippet[title]" value="{{ snippet.title }}" />
+
+        <label for="snippet[language]">Language:</label>
+        <select name="snippet[language]">
+            {% for language in languages %}
+                {% set selected = '' %}
+                {% if language == snippet.language %}
+                    {% set selected = 'selected="selected"' %}
+                {% endif %}
+                <option value="{{ language }}" {{ selected | raw }}>{{ language }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="snippet[code]">Code:</label>
+        <textarea name="snippet[code]">{{ snippet.code }}</textarea>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn" href="/show/{{ snippet.id }}">Cancel</a>
+        </div>
+    </form>
+{% endblock %}
