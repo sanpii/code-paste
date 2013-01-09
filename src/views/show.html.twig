@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <div class="snippet">
+        <h1>
+            {{ snippet.title }}
+            <a href="/show/{{ snippet.id }}" title="Link"><i class="icon-share"> </i></a>
+            <a href="/edit/{{ snippet.id }}" title="Edit"><i class="icon-edit"> </i></a>
+        </h1>
+        <pre>{{ snippet.code }}</pre>
+    </div>
+{% endblock %}

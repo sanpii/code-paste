@@ -5,6 +5,21 @@ use \Symfony\Component\HttpFoundation\Response;
 
 $app = require __DIR__ . '/bootstrap.php';
 
+$app->get('/show/{id}', function($id) use($app) {
+    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
+        ->findByPk(array('id' => $id));;
+    if (is_null($snippet)) {
+        return new Response("Snippet $id not found", 404);
+    }
+
+    return $app['twig']->render(
+        'show.html.twig',
+        array(
+            'snippet' => $snippet->extract(),
+        )
+    );
+});
+
 $app->get('/add', function() use($app) {
     $snippet = $app['pomm']->getMapFor('\Model\Snippet')
         ->createObject(array(
