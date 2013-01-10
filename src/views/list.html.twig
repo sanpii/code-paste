@@ -3,7 +3,7 @@
 {% block content %}
     <a href="/add" class="btn">Add</a>
 
-    <ul>
+    <ul class="snippets">
         {% for snippet in pager.collection %}
             <li>
                 <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
