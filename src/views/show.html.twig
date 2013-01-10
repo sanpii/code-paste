@@ -8,6 +8,11 @@
             <a href="/edit/{{ snippet.id }}" title="Edit"><i class="icon-edit"> </i></a>
             <a href="/delete/{{ snippet.id }}" title="Delete"><i class="icon-remove"> </i></a>
         </h1>
+        <ul class="tags">
+            {% for keyword in snippet.keywords %}
+                <li><span class="label label-info">{{ keyword }}</span></li>
+            {% endfor %}
+        </ul>
         {{ snippet.source|raw }}
     </div>
 {% endblock %}

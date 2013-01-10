@@ -12,3 +12,15 @@ body {
     margin: 30px 0;
 }
 
+.tags {
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.tags li {
+    display: inline;
+}
+
+.tags li input {
+    width: 9em;
+}
