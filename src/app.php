@@ -9,7 +9,7 @@ $app->get('/', function(Request $request) use($app) {
     $page = $request->get('page', 1);
 
     $pager = $app['pomm']->getMapFor('\Model\Snippet')
-        ->paginateFindWhere('1 = 1', array(), 'ORDER BY created ASC', 25, $page);
+        ->paginateFindWhere('1 = 1', array(), 'ORDER BY created DESC', 25, $page);
 
     return $app['twig']->render(
         'list.html.twig',
@@ -44,7 +44,7 @@ $app->get('/add', function() use($app) {
         ));
 
     return $app['twig']->render(
-        'add.html.twig',
+        'edit.html.twig',
         array(
             'snippet' => $snippet->extract(),
             'languages' => array('php', 'text'),

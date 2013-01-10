@@ -1,9 +1,13 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <form method="post" action="/edit/{{ snippet.id }}">
-        <input type="hidden" name="_method" value="put" />
-        <input type="hidden" name="snippet[id]" value="{{ snippet.id }}" />
+    {% if snippet.id is defined %}
+        <form method="post" action="/edit/{{ snippet.id }}">
+            <input type="hidden" name="_method" value="put" />
+            <input type="hidden" name="snippet[id]" value="{{ snippet.id }}" />
+    {% else %}
+        <form method="post" action="/add">
+    {% endif %}
 
         <label for="snippet[title]">Title:</label>
         <input type="text" name="snippet[title]" value="{{ snippet.title }}" />
@@ -24,7 +28,11 @@
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a class="btn" href="/show/{{ snippet.id }}">Cancel</a>
+            {% if snippet.id is defined %}
+                <a class="btn" href="/show/{{ snippet.id }}">Cancel</a>
+            {% else %}
+                <a class="btn" href="/">Cancel</a>
+            {% endif %}
         </div>
     </form>
 {% endblock %}
