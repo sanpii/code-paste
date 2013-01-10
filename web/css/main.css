@@ -24,3 +24,12 @@ body {
 .tags li input {
     width: 9em;
 }
+
+li .tags {
+    display: inline;
+    margin-left: 1em;
+}
+
+.tags .label {
+    padding: 5px 10px;
+}

@@ -44,7 +44,7 @@ $app->get('/add', function() use($app) {
         ->createObject(array(
             'title' => '',
             'code' => '',
-            'keywords' => array(),
+            'keywords' => array(''),
             'language' => 'text',
         ));
 
@@ -58,8 +58,13 @@ $app->get('/add', function() use($app) {
 });
 
 $app->post('/add', function(Request $request) use($app) {
+    $data = $request->request->get('snippet');
+    $data['keywords'] = array_filter($data['keywords'], function($keyword) {
+        return !empty($keyword);
+    });
+
     $snippet = $app['pomm']->getMapFor('\Model\Snippet')
-        ->createAndSaveObject($request->request->get('snippet'));
+        ->createAndSaveObject($data);
     return $app->redirect("/show/{$snippet->id}");
 });
 
@@ -70,10 +75,13 @@ $app->get('/edit/{id}', function($id) use($app) {
         return new Response("Snippet $id not found", 404);
     }
 
+    $data = $snippet->extract();
+    $data['keywords'][] = '';
+
     return $app['twig']->render(
         'edit.html.twig',
         array(
-            'snippet' => $snippet->extract(),
+            'snippet' => $data,
             'languages' => $app['geshi']->get_supported_languages(true),
         )
     );

@@ -7,6 +7,11 @@
         {% for snippet in pager.collection %}
             <li>
                 <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
+                <ul class="tags">
+                    {% for keyword in snippet.keywords %}
+                        <li><span class="label label-info">{{ keyword }}</span></li>
+                    {% endfor %}
+                </ul>
             </li>
         {% endfor %}
     </ul>

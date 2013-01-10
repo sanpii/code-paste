@@ -28,7 +28,6 @@
             {% for key, keyword in snippet.keywords %}
                 <li><input type="text" name="snippet[keywords][{{ key }}]" value="{{ keyword }}" /></li>
             {% endfor %}
-            <li><input type="text" name="snippet[keywords][{{ snippet.keywords|length }}]" value="" /></li>
         </ul>
 
         <label for="snippet[code]">Code:</label>
