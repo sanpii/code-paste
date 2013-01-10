@@ -1,0 +1,25 @@
+{% block pager %}
+    {% if pager.getLastPage() > 1 %}
+       <ul class="pager">
+           {% if pager.isPreviousPage() %}
+               <li class="previous">
+                   <a href="/?page={{ pager.page - 1 }}">&larr; Newer</a>
+               </li>
+           {% else %}
+               <li class="previous disabled">
+                   <a href="#">&larr; Newer</a>
+               </li>
+           {% endif %}
+
+           {% if pager.isNextPage() %}
+               <li class="next">
+                   <a href="/?page={{ pager.page + 1 }}">Older &rarr;</a>
+               </li>
+           {% else %}
+               <li class="next disabled">
+                   <a href="#">Older &rarr;</a>
+               </li>
+           {% endif %}
+       </ul>
+    {% endif %}
+{% endblock %}
