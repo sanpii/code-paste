@@ -9,13 +9,15 @@
             <a href="/delete/{{ snippet.id }}" title="Delete"><i class="icon-remove"> </i></a>
         </h1>
 
+        {% if snippet.keywords is not empty %}
+            <ul class="tags">
+                <li><i title="Keywords" class="icon-tag"> </i></li>
+                {% for keyword in snippet.keywords %}
+                    <li><span class="label label-info">{{ keyword }}</span></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
-        <ul class="tags">
-            <li><i title="Keywords" class="icon-tag"> </i></li>
-            {% for keyword in snippet.keywords %}
-                <li><span class="label label-info">{{ keyword }}</span></li>
-            {% endfor %}
-        </ul>
         {{ snippet.source|raw }}
     </div>
 {% endblock %}
