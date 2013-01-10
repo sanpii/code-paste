@@ -2,6 +2,7 @@
 
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
+use \Symfony\Component\HttpKernel\HttpKernelInterface;
 
 $app = require __DIR__ . '/bootstrap.php';
 
@@ -40,39 +41,35 @@ $app->get('/show/{id}', function($id) use($app) {
 });
 
 $app->get('/add', function() use($app) {
-    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
-        ->createObject(array(
-            'title' => '',
-            'code' => '',
-            'keywords' => array(''),
-            'language' => 'text',
-        ));
-
-    return $app['twig']->render(
-        'edit.html.twig',
-        array(
-            'snippet' => $snippet->extract(),
-            'languages' => $app['geshi']->get_supported_languages(true),
-        )
+    return $app->handle(
+        Request::create('/edit/-1', 'GET'),
+        HttpKernelInterface::SUB_REQUEST
     );
 });
 
 $app->post('/add', function(Request $request) use($app) {
-    $data = $request->request->get('snippet');
-    $data['keywords'] = array_filter($data['keywords'], function($keyword) {
-        return !empty($keyword);
-    });
-
-    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
-        ->createAndSaveObject($data);
-    return $app->redirect("/show/{$snippet->id}");
+    return $app->handle(
+        Request::create('/edit/-1', 'PUT', $request->request->all()),
+        HttpKernelInterface::SUB_REQUEST
+    );
 });
 
 $app->get('/edit/{id}', function($id) use($app) {
-    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
-        ->findByPk(array('id' => $id));
-    if (is_null($snippet)) {
-        return new Response("Snippet $id not found", 404);
+    $map = $app['pomm']->getMapFor('\Model\Snippet');
+
+    if ($id > 0) {
+        $snippet = $map->findByPk(array('id' => $id));
+        if (is_null($snippet)) {
+            return new Response("Snippet $id not found", 404);
+        }
+    }
+    else {
+        $snippet = $map->createObject(array(
+            'title' => '',
+            'code' => '',
+            'keywords' => array(),
+            'language' => 'text',
+        ));
     }
 
     $data = $snippet->extract();
@@ -90,9 +87,14 @@ $app->get('/edit/{id}', function($id) use($app) {
 $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     $map = $app['pomm']->getMapFor('\Model\Snippet');
 
-    $snippet = $map->findByPk(array('id' => $id));
-    if (is_null($snippet)) {
-        return new Response("Snippet $id not found", 404);
+    if ($id > 0) {
+        $snippet = $map->findByPk(array('id' => $id));
+        if (is_null($snippet)) {
+            return new Response("Snippet $id not found", 404);
+        }
+    }
+    else {
+        $snippet = $map->createObject();
     }
 
     $snippet->hydrate($request->request->get('snippet'));
