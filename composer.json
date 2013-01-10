@@ -6,7 +6,8 @@
         "pomm/pomm": "*@stable",
         "twig/twig": "*@stable",
         "twitter/bootstrap": "*@stable",
-        "leafo/lessphp": "*@stable"
+        "leafo/lessphp": "*@stable",
+        "easybook/geshi": "*@stable"
     },
     "require-dev": {
         "atoum/atoum": "*@dev",

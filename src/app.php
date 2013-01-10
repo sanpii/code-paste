@@ -26,6 +26,11 @@ $app->get('/show/{id}', function($id) use($app) {
         return new Response("Snippet $id not found", 404);
     }
 
+    $geshi = $app['geshi'];
+    $geshi->set_language($snippet->language);
+    $geshi->set_source($snippet->code);
+    $snippet->source = $geshi->parse_code();
+
     return $app['twig']->render(
         'show.html.twig',
         array(
@@ -47,7 +52,7 @@ $app->get('/add', function() use($app) {
         'edit.html.twig',
         array(
             'snippet' => $snippet->extract(),
-            'languages' => array('php', 'text'),
+            'languages' => $app['geshi']->get_supported_languages(true),
         )
     );
 });
@@ -69,7 +74,7 @@ $app->get('/edit/{id}', function($id) use($app) {
         'edit.html.twig',
         array(
             'snippet' => $snippet->extract(),
-            'languages' => array('php', 'text'),
+            'languages' => $app['geshi']->get_supported_languages(true),
         )
     );
 });

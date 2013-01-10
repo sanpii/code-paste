@@ -24,4 +24,8 @@ $app['pomm'] = function() use ($app) {
     return $app['pomm.service']->createConnection();
 };
 
+$app['geshi'] = function() use ($app) {
+    return new GeSHi();
+};
+
 return $app;

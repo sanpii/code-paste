@@ -14,12 +14,12 @@
 
         <label for="snippet[language]">Language:</label>
         <select name="snippet[language]">
-            {% for language in languages %}
+            {% for langname, fullname in languages|sort %}
                 {% set selected = '' %}
-                {% if language == snippet.language %}
+                {% if langname == snippet.language %}
                     {% set selected = 'selected="selected"' %}
                 {% endif %}
-                <option value="{{ language }}" {{ selected | raw }}>{{ language }}</option>
+                <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
             {% endfor %}
         </select>
 
