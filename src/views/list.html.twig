@@ -3,18 +3,37 @@
 {% block content %}
     <a href="/add" class="btn">Add</a>
 
-    <ul class="snippets">
-        {% for snippet in pager.collection %}
-            <li>
-                <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
-                <ul class="tags">
-                    {% for keyword in snippet.keywords %}
-                        <li><span class="label label-info">{{ keyword }}</span></li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
+    <div id="seach" class="control-group">
+        <div class="controls">
+            <div class="input-append">
+                <form method="get" action="/search">
+                    <input class="span4" name="q" type="text" placeholder="Search…" value="{{ q }}" />
+                    <span class="add-on"><i class="icon-search"></i></span>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    {% include "pager.html.twig" %}
+    <div class="snippets">
+        {% if pager.getCount() > 0 %}
+            <ul>
+                {% for snippet in pager.collection %}
+                    <li>
+                        <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
+                        <ul class="tags">
+                            {% for keyword in snippet.keywords %}
+                                <li><span class="label label-info">{{ keyword }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% include "pager.html.twig" %}
+        {% else %}
+            <div class="alert alert-info">
+                No snippet found.
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

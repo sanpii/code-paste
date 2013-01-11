@@ -17,4 +17,18 @@ class SnippetMap extends BaseSnippetMap
 
         parent::saveOne($object);
     }
+
+    public function search($query, $length, $page)
+    {
+        list($where, $params) = $this->parseQueryString($query);
+
+        return $this->paginateFindWhere(
+            $where, $params, 'ORDER BY created DESC', $length, $page
+        );
+    }
+
+    private function parseQueryString($query)
+    {
+        return array('title LIKE ?', array("%$query%"));
+    }
 }

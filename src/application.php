@@ -16,6 +16,23 @@ $app->get('/', function(Request $request) use($app) {
         'list.html.twig',
         array(
             'pager' => $pager,
+            'q' => '',
+        )
+    );
+});
+
+$app->get('/search', function(Request $request) use($app) {
+    $page = $request->get('page', 1);
+    $query = $request->get('q', '');
+
+    $pager = $app['pomm']->getMapFor('\Model\Snippet')
+        ->search($query, 25, $page);
+
+    return $app['twig']->render(
+        'list.html.twig',
+        array(
+            'pager' => $pager,
+            'q' => $query,
         )
     );
 });

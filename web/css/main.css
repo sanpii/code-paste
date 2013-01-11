@@ -57,3 +57,7 @@ li .tags {
     top: -5px;
     position: relative;
 }
+
+#seach {
+    float: right;
+}
