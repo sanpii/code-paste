@@ -20,15 +20,45 @@ class SnippetMap extends BaseSnippetMap
 
     public function search($query, $length, $page)
     {
-        list($where, $params) = $this->parseQueryString($query);
+        $parser = new \QueryParser();
+        $tokens = $parser->parse($query);
+
+        list($where, $params) = $this->tokensToWhereClause($tokens);
 
         return $this->paginateFindWhere(
             $where, $params, 'ORDER BY created DESC', $length, $page
         );
     }
 
-    private function parseQueryString($query)
+    private function tokensToWhereClause($tokens)
     {
-        return array('title LIKE ?', array("%$query%"));
+        $where = '1 = 1';
+        $params = array();
+
+        foreach ($tokens['keywords'] as $keyword) {
+            $where .= ' AND (title ILIKE ? OR code ILIKE ?)';
+            $params[] = "%$keyword%";
+            $params[] = "%$keyword%";
+        }
+
+        if (!empty($tokens['tags'])) {
+            $where .= ' AND keywords @> ?';
+            $params[] = '{' . implode(', ', $tokens['tags']) . '}';
+        }
+
+        $fields = $this->getFields();
+        foreach ($tokens['fields'] as $name => $values) {
+            if (isset($fields[$name])) {
+                foreach ($values as $value) {
+                    $where .= ' AND LOWER(' . $name . ') = LOWER(?)';
+                    $params[] = $value;
+                }
+            }
+            else {
+                throw new \RuntimeException("Unknom field: $name");
+            }
+        }
+
+        return array($where, $params);
     }
 }
