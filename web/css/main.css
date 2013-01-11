@@ -58,6 +58,10 @@ li .tags {
     position: relative;
 }
 
-#seach {
+#search {
     float: right;
+}
+
+#search .help {
+    display: none;
 }
