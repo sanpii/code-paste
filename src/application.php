@@ -7,17 +7,9 @@ use \Symfony\Component\HttpKernel\HttpKernelInterface;
 $app = require __DIR__ . '/bootstrap.php';
 
 $app->get('/', function(Request $request) use($app) {
-    $page = $request->get('page', 1);
-
-    $pager = $app['pomm']->getMapFor('\Model\Snippet')
-        ->paginateFindWhere('1 = 1', array(), 'ORDER BY created DESC', 25, $page);
-
-    return $app['twig']->render(
-        'list.html.twig',
-        array(
-            'pager' => $pager,
-            'q' => '',
-        )
+    return $app->handle(
+        Request::create('/search', 'GET', $request->request->all()),
+        HttpKernelInterface::SUB_REQUEST
     );
 });
 
@@ -29,7 +21,7 @@ $app->get('/search', function(Request $request) use($app) {
         ->search($query, 25, $page);
 
     return $app['twig']->render(
-        'list.html.twig',
+        'search.html.twig',
         array(
             'pager' => $pager,
             'q' => $query,
