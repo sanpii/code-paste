@@ -33,7 +33,7 @@ $app->get('/show/{id}', function($id) use($app) {
     $snippet = $app['pomm']->getMapFor('\Model\Snippet')
         ->findByPk(array('id' => $id));
     if (is_null($snippet)) {
-        return new Response("Snippet $id not found", 404);
+        $app->abort(404, "Snippet $id not found");
     }
 
     $geshi = $app['geshi'];
@@ -69,7 +69,7 @@ $app->get('/edit/{id}', function($id) use($app) {
     if ($id > 0) {
         $snippet = $map->findByPk(array('id' => $id));
         if (is_null($snippet)) {
-            return new Response("Snippet $id not found", 404);
+            $app->abort(404, "Snippet $id not found");
         }
     }
     else {
@@ -99,7 +99,7 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     if ($id > 0) {
         $snippet = $map->findByPk(array('id' => $id));
         if (is_null($snippet)) {
-            return new Response("Snippet $id not found", 404);
+            $app->abort(404, "Snippet $id not found");
         }
     }
     else {
@@ -116,7 +116,7 @@ $app->get('/delete/{id}', function($id) use($app) {
     $snippet = $app['pomm']->getMapFor('\Model\Snippet')
         ->findByPk(array('id' => $id));
     if (is_null($snippet)) {
-        return new Response("Snippet $id not found", 404);
+        $app->abort(404, "Snippet $id not found");
     }
 
     return $app['twig']->render(
@@ -132,7 +132,7 @@ $app->delete('/delete/{id}', function($id) use($app) {
 
     $snippet = $map->findByPk(array('id' => $id));
     if (is_null($snippet)) {
-        return new Response("Snippet $id not found", 404);
+        $app->abort(404, "Snippet $id not found");
     }
 
     $map->deleteOne($snippet);
