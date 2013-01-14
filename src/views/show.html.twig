@@ -2,12 +2,12 @@
 
 {% block content %}
     <div class="snippet">
-        <h1>
+        <h2>
             {{ snippet.title }}
             <a href="/show/{{ snippet.id }}" title="Link"><i class="icon-share"> </i></a>
             <a href="/edit/{{ snippet.id }}" title="Edit"><i class="icon-edit"> </i></a>
             <a href="/delete/{{ snippet.id }}" title="Delete"><i class="icon-remove"> </i></a>
-        </h1>
+        </h2>
 
         {% if snippet.keywords is not empty %}
             <ul class="tags">
