@@ -36,7 +36,7 @@ class SnippetMap extends BaseSnippetMap
         $params = array();
 
         foreach ($tokens['keywords'] as $keyword) {
-            $where .= ' AND (title ILIKE ? OR code ILIKE ?)';
+            $where .= ' AND ((code).name ILIKE ? OR (code).content ILIKE ?)';
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
         }
@@ -46,16 +46,22 @@ class SnippetMap extends BaseSnippetMap
             $params[] = '{' . implode(', ', $tokens['tags']) . '}';
         }
 
-        $fields = $this->getFields();
         foreach ($tokens['fields'] as $name => $values) {
-            if (isset($fields[$name])) {
-                foreach ($values as $value) {
-                    $where .= ' AND LOWER(' . $name . ') = LOWER(?)';
-                    $params[] = $value;
-                }
+            switch($name) {
+                case 'title':
+                    $field = '(code).name';
+                break;
+                case 'code':
+                    $field = '(code).content';
+                break;
+                default:
+                    throw new \RuntimeException("Unknom field: $name");
+                break;
             }
-            else {
-                throw new \RuntimeException("Unknom field: $name");
+
+            foreach ($values as $value) {
+                $where .= ' AND LOWER(' . $field . ') = LOWER(?)';
+                $params[] = $value;
             }
         }
 

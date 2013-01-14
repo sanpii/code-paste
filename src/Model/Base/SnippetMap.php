@@ -17,7 +17,7 @@ abstract class SnippetMap extends BaseObjectMap
         $this->addField('keywords', 'varchar[]');
         $this->addField('language', 'varchar');
         $this->addField('title', 'varchar');
-        $this->addField('code', 'varchar');
+        $this->addField('code', 'public.source');
         $this->addField('created', 'timestamp');
         $this->addField('updated', 'timestamp');
 

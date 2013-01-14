@@ -23,7 +23,9 @@ $app['pomm.service'] = $app->share(function() use ($app) {
 });
 
 $app['pomm'] = function() use ($app) {
-    return $app['pomm.service']->createConnection();
+    return $app['pomm.service']->getDatabase()
+        ->registerConverter('source', new Model\Converter\Source(), array('public.source', 'source'))
+        ->createConnection();
 };
 
 $app['geshi'] = function() use ($app) {

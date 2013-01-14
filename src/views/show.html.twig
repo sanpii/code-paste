@@ -18,6 +18,7 @@
             </ul>
         {% endif %}
 
-        {{ snippet.source|raw }}
+        <h3>{{ snippet.code.name }}</h3>
+        {{ snippet.code.source|raw }}
     </div>
 {% endblock %}
