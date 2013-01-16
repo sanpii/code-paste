@@ -15,6 +15,10 @@ class SnippetMap extends BaseSnippetMap
             return !empty($keyword);
         });
 
+        $object->codes = array_filter($object->codes, function($code) {
+            return !empty($code['content']);
+        });
+
         parent::saveOne($object);
     }
 
@@ -25,9 +29,18 @@ class SnippetMap extends BaseSnippetMap
 
         list($where, $params) = $this->tokensToWhereClause($tokens);
 
-        return $this->paginateFindWhere(
-            $where, $params, 'ORDER BY created DESC', $length, $page
-        );
+        $sql = <<<EOD
+WITH
+unnest_codes (id, code) AS (SELECT id, unnest(codes) AS code FROM snippet)
+SELECT DISTINCT snippet.* FROM snippet NATURAL JOIN unnest_codes WHERE $where ORDER BY created DESC
+EOD;
+        $sqlCount = <<<EOD
+WITH
+unnest_codes (id, code) AS (SELECT id, unnest(codes) AS code FROM snippet)
+SELECT DISTINCT COUNT(*) FROM snippet NATURAL JOIN unnest_codes WHERE $where
+EOD;
+
+        return $this->paginateQuery($sql, $sqlCount, $params, $length, $page);
     }
 
     private function tokensToWhereClause($tokens)
@@ -36,7 +49,8 @@ class SnippetMap extends BaseSnippetMap
         $params = array();
 
         foreach ($tokens['keywords'] as $keyword) {
-            $where .= ' AND ((code).name ILIKE ? OR (code).content ILIKE ?)';
+            $where .= ' AND (title ILIKE ? OR (unnest_codes.code).name ILIKE ? OR (unnest_codes.code).content ILIKE ?)';
+            $params[] = "%$keyword%";
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
         }
@@ -49,10 +63,10 @@ class SnippetMap extends BaseSnippetMap
         foreach ($tokens['fields'] as $name => $values) {
             switch($name) {
                 case 'title':
-                    $field = '(code).name';
+                    $field = '(unnest_codes.code).name';
                 break;
                 case 'code':
-                    $field = '(code).content';
+                    $field = '(unnest_codes.code).content';
                 break;
                 default:
                     throw new \RuntimeException("Unknom field: $name");

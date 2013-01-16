@@ -38,8 +38,10 @@ $app->get('/show/{id}', function($id) use($app) {
 
     $geshi = $app['geshi'];
     $geshi->set_language($snippet->language);
-    $geshi->set_source($snippet->code->content);
-    $snippet->code->source = $geshi->parse_code();
+    foreach ($snippet->codes as $code) {
+        $geshi->set_source($code->content);
+        $code->source = $geshi->parse_code();
+    }
 
     return $app['twig']->render(
         'show.html.twig',
@@ -75,7 +77,7 @@ $app->get('/edit/{id}', function($id) use($app) {
     else {
         $snippet = $map->createObject(array(
             'title' => '',
-            'code' => array('name' => '', 'content' => ''),
+            'codes' => array(),
             'keywords' => array(),
             'language' => 'text',
         ));
@@ -83,6 +85,7 @@ $app->get('/edit/{id}', function($id) use($app) {
 
     $data = $snippet->extract();
     $data['keywords'][] = '';
+    $data['codes'][] = array('name' => '', 'content' => '');
 
     return $app['twig']->render(
         'edit.html.twig',

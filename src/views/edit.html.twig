@@ -30,9 +30,13 @@
             {% endfor %}
         </ul>
 
-        <label for="snippet[code]">Code:</label>
-        <input type="text" name="snippet[code][name]" value="{{ snippet.code.name }}" /><br />
-        <textarea name="snippet[code][content]">{{ snippet.code.content }}</textarea>
+        <label>Code:</label>
+        {% for key, code in snippet.codes %}
+            <div>
+                <input type="text" name="snippet[codes][{{ key }}][name]" value="{{ code.name }}" /><br />
+                <textarea name="snippet[codes][{{ key }}][content]">{{ code.content }}</textarea>
+            </div>
+        {% endfor %}
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>

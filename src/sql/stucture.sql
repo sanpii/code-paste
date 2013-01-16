@@ -5,7 +5,7 @@ CREATE TABLE snippet (
     keywords character varying[],
     language character varying NOT NULL,
     title character varying NOT NULL,
-    code source NOT NULL,
+    codes source[] NOT NULL,
     created timestamp without time zone DEFAULT now() NOT NULL,
     updated timestamp without time zone DEFAULT now() NOT NULL
 );
