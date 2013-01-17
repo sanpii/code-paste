@@ -12,18 +12,7 @@
         <label for="snippet[title]">Title:</label>
         <input type="text" name="snippet[title]" value="{{ snippet.title }}" />
 
-        <label for="snippet[language]">Language:</label>
-        <select name="snippet[language]">
-            {% for langname, fullname in languages|sort %}
-                {% set selected = '' %}
-                {% if langname == snippet.language %}
-                    {% set selected = 'selected="selected"' %}
-                {% endif %}
-                <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="snippet[language][0]">Keywords:</label>
+        <label for="snippet[keywords][0]">Keywords:</label>
         <ul class="tags">
             {% for key, keyword in snippet.keywords %}
                 <li><input type="text" name="snippet[keywords][{{ key }}]" value="{{ keyword }}" /></li>
@@ -33,7 +22,16 @@
         <label>Code:</label>
         {% for key, code in snippet.codes %}
             <div>
-                <input type="text" name="snippet[codes][{{ key }}][name]" value="{{ code.name }}" /><br />
+                <input type="text" name="snippet[codes][{{ key }}][name]" value="{{ code.name }}" />
+                <select name="snippet[codes][{{ key }}][language]">
+                    {% for langname, fullname in languages|sort %}
+                        {% set selected = '' %}
+                        {% if langname == code.language %}
+                            {% set selected = 'selected="selected"' %}
+                        {% endif %}
+                        <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
+                    {% endfor %}
+                </select><br />
                 <textarea name="snippet[codes][{{ key }}][content]">{{ code.content }}</textarea>
             </div>
         {% endfor %}

@@ -26,16 +26,18 @@ class Source implements ConverterInterface
 
         return new $this->className(
             $this->stringConverter->fromPg($values[0]),
-            $this->stringConverter->fromPg($values[1])
+            $this->stringConverter->fromPg($values[1]),
+            $this->stringConverter->fromPg($values[2])
         );
     }
 
     public function toPg($data, $type = null)
     {
         return sprintf(
-            "(%s, %s)",
+            "(%s, %s, %s)",
             $this->stringConverter->toPg($data['name']),
-            $this->stringConverter->toPg($data['content'])
+            $this->stringConverter->toPg($data['content']),
+            $this->stringConverter->toPg($data['language'])
         );
     }
 }

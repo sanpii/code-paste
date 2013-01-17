@@ -1,9 +1,8 @@
-CREATE TYPE source AS (name character varying, content text);
+CREATE TYPE source AS (name character varying, content text, language character varying);
 
 CREATE TABLE snippet (
     id serial PRIMARY KEY,
     keywords character varying[],
-    language character varying NOT NULL,
     title character varying NOT NULL,
     codes source[] NOT NULL,
     created timestamp without time zone DEFAULT now() NOT NULL,
