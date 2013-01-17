@@ -31,7 +31,7 @@
                         <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
                         <ul class="tags">
                             {% for keyword in snippet.keywords %}
-                                <li><span class="label label-info">{{ keyword }}</span></li>
+                                <li><a href="/search?q=[{{ keyword }}]" class="label label-info">{{ keyword }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
