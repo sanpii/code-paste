@@ -18,8 +18,9 @@
         {% endif %}
 
         {% for key, code in snippet.codes %}
-            <h3 name="{{ key }}"><a href="#{{ key }}">{{ code.name }}</a></h3>
-            {{ code.source|raw }}
+            <pre class="snippet-code">
+<h3 id="file-{{ key + 1 }}">{{ code.name }} <a href="#file-{{ key + 1 }}">#</a></h3>
+{{ code.source|raw }}</pre>
         {% endfor %}
     </div>
 {% endblock %}
