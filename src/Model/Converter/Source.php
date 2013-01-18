@@ -25,9 +25,9 @@ class Source implements ConverterInterface
         $values = str_getcsv($data, ',');
 
         return new $this->className(
-            $this->stringConverter->fromPg($values[0]),
-            $this->stringConverter->fromPg($values[1]),
-            $this->stringConverter->fromPg($values[2])
+            str_replace('\\\\', '\\', $this->stringConverter->fromPg($values[0])),
+            str_replace('\\\\', '\\', $this->stringConverter->fromPg($values[1])),
+            str_replace('\\\\', '\\', $this->stringConverter->fromPg($values[2]))
         );
     }
 
