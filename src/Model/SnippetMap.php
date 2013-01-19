@@ -27,7 +27,7 @@ class SnippetMap extends BaseSnippetMap
         $parser = new \QueryParser();
         $tokens = $parser->parse($query);
 
-        list($where, $params) = $this->tokensToWhereClause($tokens);
+        $where = $this->tokensToWhere($tokens);
 
         $sql = <<<EOD
 WITH
@@ -40,24 +40,25 @@ unnest_codes (id, code) AS (SELECT id, unnest(codes) AS code FROM snippet)
 SELECT DISTINCT COUNT(*) FROM snippet NATURAL JOIN unnest_codes WHERE $where
 EOD;
 
-        return $this->paginateQuery($sql, $sqlCount, $params, $length, $page);
+        return $this->paginateQuery($sql, $sqlCount, $where->getValues(), $length, $page);
     }
 
-    private function tokensToWhereClause($tokens)
+    private function tokensToWhere($tokens)
     {
-        $where = '1 = 1';
-        $params = array();
+        $where = new Where();
 
         foreach ($tokens['keywords'] as $keyword) {
-            $where .= ' AND (title ILIKE ? OR (unnest_codes.code).name ILIKE ? OR (unnest_codes.code).content ILIKE ?)';
-            $params[] = "%$keyword%";
-            $params[] = "%$keyword%";
-            $params[] = "%$keyword%";
+            $where->andWhere(
+                '(title ILIKE ? OR (unnest_codes.code).name ILIKE ? OR (unnest_codes.code).content ILIKE ?)',
+                array_fill(0, 3, "%$keyword%")
+            );
         }
 
         if (!empty($tokens['tags'])) {
-            $where .= ' AND keywords @> ?';
-            $params[] = '{' . implode(', ', $tokens['tags']) . '}';
+            $where->andWhere(
+                'keywords @> ?',
+                array('{' . implode(', ', $tokens['tags']) . '}')
+            );
         }
 
         foreach ($tokens['fields'] as $name => $values) {
@@ -74,11 +75,13 @@ EOD;
             }
 
             foreach ($values as $value) {
-                $where .= ' AND LOWER(' . $field . ') = LOWER(?)';
-                $params[] = $value;
+                $where->andWhere(
+                    'LOWER(' . $field . ') = LOWER(?)',
+                    array($value)
+                );
             }
         }
 
-        return array($where, $params);
+        return $where;
     }
 }
