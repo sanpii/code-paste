@@ -146,4 +146,19 @@ $app->delete('/delete/{id}', function($id) use($app) {
     return $app->redirect('/');
 });
 
+$app->get('/opensearch.xml', function(Request $request) use($app) {
+    $baseurl = $request->getUriForPath('');
+
+    $contents = $app['twig']->render(
+        'opensearch.xml.twig',
+        array(
+            'baseurl' => $baseurl,
+        )
+    );
+
+    return new Response($contents, 200, array(
+        'Content-Type' => 'application/xml',
+    ));
+});
+
 return $app;
