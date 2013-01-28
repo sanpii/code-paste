@@ -18,14 +18,14 @@
 
         <ul class="tags">
             {% for keyword in snippet.keywords %}
-            <li>
-                <input
-                    type="text"
-                    name="snippet[keywords][]"
-                    value="{{ keyword }}"
-                    placeholder="Keywords…"
-                />
-            </li>
+                <li>
+                    <input
+                        type="text"
+                        name="snippet[keywords][]"
+                        value="{{ keyword }}"
+                        placeholder="Keywords…"
+                    />
+                </li>
             {% endfor %}
         </ul>
 
