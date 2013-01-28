@@ -17,11 +17,11 @@
         />
 
         <ul class="tags">
-            {% for key, keyword in snippet.keywords %}
+            {% for keyword in snippet.keywords %}
             <li>
                 <input
                     type="text"
-                    name="snippet[keywords][{{ key }}]"
+                    name="snippet[keywords][]"
                     value="{{ keyword }}"
                     placeholder="Keywords…"
                 />
@@ -29,15 +29,15 @@
             {% endfor %}
         </ul>
 
-        {% for key, code in snippet.codes %}
+        {% for code in snippet.codes %}
             <div class="snippet-codes">
                 <input
                     type="text"
-                    name="snippet[codes][{{ key }}][name]"
+                    name="snippet[codes][][name]"
                     value="{{ code.name }}"
                     placeholder="Filename…"
                 />
-                <select name="snippet[codes][{{ key }}][language]">
+                <select name="snippet[codes][][language]">
                     {% for langname, fullname in languages|sort %}
                         {% set selected = '' %}
                         {% if langname == code.language %}
@@ -46,7 +46,7 @@
                         <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
                     {% endfor %}
                 </select><br />
-                <textarea name="snippet[codes][{{ key }}][content]" placeholder="Code…">{{ code.content }}</textarea>
+                <textarea name="snippet[codes][][content]" placeholder="Code…">{{ code.content }}</textarea>
             </div>
         {% endfor %}
 
