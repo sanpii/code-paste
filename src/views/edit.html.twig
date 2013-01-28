@@ -1,5 +1,37 @@
 {% extends "layout.html.twig" %}
 
+{% macro keyword_input(value) %}
+    <li {% if value == "" %}id="tpl-keyword"{% endif %}>
+        <input
+            type="text"
+            name="snippet[keywords][]"
+            value="{{ value }}"
+            placeholder="Keywords…"
+        />
+    </li>
+{% endmacro %}
+
+{% macro code_input(languages, code) %}
+    <div class="snippet-codes" {% if code.content == "" %}id="tpl-code"{% endif %}>
+        <input
+            type="text"
+            name="snippet[codes][][name]"
+            value="{{ code.name }}"
+            placeholder="Filename…"
+        />
+        <select name="snippet[codes][][language]">
+            {% for langname, fullname in languages|sort %}
+                {% set selected = '' %}
+                {% if langname == code.language %}
+                    {% set selected = 'selected="selected"' %}
+                {% endif %}
+                <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
+            {% endfor %}
+        </select><br />
+        <textarea name="snippet[codes][][content]" placeholder="Code…">{{ code.content }}</textarea>
+    </div>
+{% endmacro %}
+
 {% block content %}
     {% if snippet.id is defined %}
         <form method="post" action="/edit/{{ snippet.id }}">
@@ -18,36 +50,13 @@
 
         <ul class="tags">
             {% for keyword in snippet.keywords %}
-                <li>
-                    <input
-                        type="text"
-                        name="snippet[keywords][]"
-                        value="{{ keyword }}"
-                        placeholder="Keywords…"
-                    />
-                </li>
+                {{ _self.keyword_input(keyword) }}
             {% endfor %}
         </ul>
+        {% block keyword_input %}{% endblock %}
 
         {% for code in snippet.codes %}
-            <div class="snippet-codes">
-                <input
-                    type="text"
-                    name="snippet[codes][][name]"
-                    value="{{ code.name }}"
-                    placeholder="Filename…"
-                />
-                <select name="snippet[codes][][language]">
-                    {% for langname, fullname in languages|sort %}
-                        {% set selected = '' %}
-                        {% if langname == code.language %}
-                            {% set selected = 'selected="selected"' %}
-                        {% endif %}
-                        <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
-                    {% endfor %}
-                </select><br />
-                <textarea name="snippet[codes][][content]" placeholder="Code…">{{ code.content }}</textarea>
-            </div>
+            {{ _self.code_input(languages, code) }}
         {% endfor %}
 
         <div class="form-actions">
