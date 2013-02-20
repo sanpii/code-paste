@@ -10,7 +10,7 @@ $must_be_logged = function() use($app) {
     $response = null;
 
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
-        header('WWW-Authenticate: Basic realm="Cist"');
+        header('WWW-Authenticate: Basic realm="Code paste"');
         $response =  $app->abort(401, 'Not Authorised');
     }
     else {
