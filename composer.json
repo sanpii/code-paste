@@ -7,6 +7,7 @@
         "twig/twig": "1.12.*",
         "twitter/bootstrap": "2.2.*",
         "leafo/lessphp": "0.3.*",
+        "sanpi/twitter-bootstrap-installer": "*@dev",
         "easybook/geshi": "*"
     },
     "require-dev": {
@@ -19,13 +20,16 @@
         "behat/mink-goutte-driver": "*"
     },
     "scripts": {
-        "post-install-cmd": "Installer::postInstall",
-        "post-update-cmd": "Installer::postUpdate"
+        "post-install-cmd": "Sanpi\\TwitterBootstrap\\Composer\\ScriptHandler::postInstall",
+        "post-update-cmd": "Sanpi\\TwitterBootstrap\\Composer\\ScriptHandler::postUpdate"
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
         "psr-0": { "": "src/" }
+    },
+    "extra": {
+        "symfony-web-dir": "web"
     }
 }
