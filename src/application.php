@@ -6,6 +6,30 @@ use \Symfony\Component\HttpKernel\HttpKernelInterface;
 
 $app = require __DIR__ . '/bootstrap.php';
 
+$must_be_logged = function() use($app) {
+    $response = null;
+
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="Cist"');
+        $response =  $app->abort(401, 'Not Authorised');
+    }
+    else {
+        $author = $app['pomm']->getMapFor('\Model\Author')
+            ->findWhere('name = ? AND password = ?', array(
+                $_SERVER['PHP_AUTH_USER'],
+                hash('sha512', $_SERVER['PHP_AUTH_PW']),
+            ))
+            ->current();
+        if($author !== false) {
+            $app['user'] = $author;
+        }
+        else {
+            $response = $app->abort(403, 'Forbidden');
+        }
+    }
+    return $response;
+};
+
 $app->get('/', function(Request $request) use($app) {
     return $app->handle(
         Request::create('/search', 'GET', $request->request->all()),
@@ -56,14 +80,14 @@ $app->get('/add', function() use($app) {
         Request::create('/edit/-1', 'GET'),
         HttpKernelInterface::SUB_REQUEST
     );
-});
+})->before($must_be_logged);
 
 $app->post('/add', function(Request $request) use($app) {
     return $app->handle(
         Request::create('/edit/-1', 'PUT', $request->request->all()),
         HttpKernelInterface::SUB_REQUEST
     );
-});
+})->before($must_be_logged);
 
 $app->get('/edit/{id}', function($id) use($app) {
     $map = $app['pomm']->getMapFor('\Model\Snippet');
@@ -97,7 +121,7 @@ $app->get('/edit/{id}', function($id) use($app) {
             'languages' => $app['geshi']->get_supported_languages(true),
         )
     );
-});
+})->before($must_be_logged);
 
 $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     $map = $app['pomm']->getMapFor('\Model\Snippet');
@@ -110,13 +134,14 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     }
     else {
         $snippet = $map->createObject();
+        $snippet->author_id = $app['user']->id;
     }
 
     $snippet->hydrate($request->request->get('snippet'));
     $map->saveOne($snippet);
 
     return $app->redirect("/show/{$snippet->id}");
-});
+})->before($must_be_logged);
 
 $app->get('/delete/{id}', function($id) use($app) {
     $snippet = $app['pomm']->getMapFor('\Model\Snippet')
@@ -131,7 +156,7 @@ $app->get('/delete/{id}', function($id) use($app) {
             'snippet' => $snippet->extract(),
         )
     );
-});
+})->before($must_be_logged);
 
 $app->delete('/delete/{id}', function($id) use($app) {
     $map = $app['pomm']->getMapFor('\Model\Snippet');
@@ -144,7 +169,7 @@ $app->delete('/delete/{id}', function($id) use($app) {
     $map->deleteOne($snippet);
 
     return $app->redirect('/');
-});
+})->before($must_be_logged);
 
 $app->get('/opensearch.xml', function(Request $request) use($app) {
     $baseurl = $request->getUriForPath('');
