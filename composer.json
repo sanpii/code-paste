@@ -3,11 +3,11 @@
     "license": "MIT",
     "require": {
         "silex/silex": "1.0.*@dev",
-        "pomm/pomm": "*@stable",
-        "twig/twig": "*@stable",
-        "twitter/bootstrap": "*@stable",
-        "leafo/lessphp": "*@stable",
-        "easybook/geshi": "*@stable"
+        "pomm/pomm": "1.1.*",
+        "twig/twig": "1.12.*",
+        "twitter/bootstrap": "2.2.*",
+        "leafo/lessphp": "0.3.*",
+        "easybook/geshi": "*"
     },
     "require-dev": {
         "atoum/atoum": "*@dev",
