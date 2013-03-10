@@ -11,15 +11,15 @@
     </li>
 {% endmacro %}
 
-{% macro code_input(languages, code) %}
+{% macro code_input(id, languages, code) %}
     <div class="snippet-codes" {% if code.content == "" %}id="tpl-code"{% endif %}>
         <input
             type="text"
-            name="snippet[codes][][name]"
+            name="snippet[codes][{{ id }}][name]"
             value="{{ code.name }}"
             placeholder="Filename…"
         />
-        <select name="snippet[codes][][language]">
+        <select name="snippet[codes][{{ id }}][language]">
             {% for langname, fullname in languages|sort %}
                 {% set selected = '' %}
                 {% if langname == code.language %}
@@ -28,7 +28,7 @@
                 <option value="{{ langname }}" {{ selected|raw }}>{{ fullname }}</option>
             {% endfor %}
         </select><br />
-        <textarea name="snippet[codes][][content]" placeholder="Code…">{{ code.content }}</textarea>
+        <textarea name="snippet[codes][{{ id }}][content]" placeholder="Code…">{{ code.content }}</textarea>
     </div>
 {% endmacro %}
 
@@ -55,8 +55,8 @@
         </ul>
         {% block keyword_input %}{% endblock %}
 
-        {% for code in snippet.codes %}
-            {{ _self.code_input(languages, code) }}
+        {% for id, code in snippet.codes %}
+            {{ _self.code_input(id, languages, code) }}
         {% endfor %}
 
         <div class="form-actions">
