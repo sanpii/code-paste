@@ -14,7 +14,7 @@ $must_be_logged = function() use($app) {
         $response =  $app->abort(401, 'Not Authorised');
     }
     else {
-        $author = $app['pomm']->getMapFor('\Model\Author')
+        $author = $app['connection']->getMapFor('\Model\Author')
             ->findWhere('name = ? AND password = ?', array(
                 $_SERVER['PHP_AUTH_USER'],
                 hash('sha512', $_SERVER['PHP_AUTH_PW']),
@@ -41,7 +41,7 @@ $app->get('/search', function(Request $request) use($app) {
     $page = $request->get('page', 1);
     $query = $request->get('q', '');
 
-    $pager = $app['pomm']->getMapFor('\Model\Snippet')
+    $pager = $app['connection']->getMapFor('\Model\Snippet')
         ->search($query, 25, $page);
 
     return $app['twig']->render(
@@ -54,7 +54,7 @@ $app->get('/search', function(Request $request) use($app) {
 });
 
 $app->get('/show/{id}', function($id) use($app) {
-    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
+    $snippet = $app['connection']->getMapFor('\Model\Snippet')
         ->findByPk(array('id' => $id));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
@@ -90,7 +90,7 @@ $app->post('/add', function(Request $request) use($app) {
 })->before($must_be_logged);
 
 $app->get('/edit/{id}', function($id) use($app) {
-    $map = $app['pomm']->getMapFor('\Model\Snippet');
+    $map = $app['connection']->getMapFor('\Model\Snippet');
 
     if ($id > 0) {
         $snippet = $map->findByPk(array('id' => $id));
@@ -124,7 +124,7 @@ $app->get('/edit/{id}', function($id) use($app) {
 })->before($must_be_logged);
 
 $app->put('/edit/{id}', function(Request $request, $id) use($app) {
-    $map = $app['pomm']->getMapFor('\Model\Snippet');
+    $map = $app['connection']->getMapFor('\Model\Snippet');
 
     if ($id > 0) {
         $snippet = $map->findByPk(array('id' => $id));
@@ -144,7 +144,7 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
 })->before($must_be_logged);
 
 $app->get('/delete/{id}', function($id) use($app) {
-    $snippet = $app['pomm']->getMapFor('\Model\Snippet')
+    $snippet = $app['connection']->getMapFor('\Model\Snippet')
         ->findByPk(array('id' => $id));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
@@ -159,7 +159,7 @@ $app->get('/delete/{id}', function($id) use($app) {
 })->before($must_be_logged);
 
 $app->delete('/delete/{id}', function($id) use($app) {
-    $map = $app['pomm']->getMapFor('\Model\Snippet');
+    $map = $app['connection']->getMapFor('\Model\Snippet');
 
     $snippet = $map->findByPk(array('id' => $id));
     if (is_null($snippet)) {

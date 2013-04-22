@@ -1,5 +1,6 @@
 <?php
 
+use \Pomm\Silex\PommServiceProvider;
 use \Silex\Provider\TwigServiceProvider;
 use \Silex\Provider\WebProfilerServiceProvider;
 use \Silex\Provider\UrlGeneratorServiceProvider;
@@ -21,15 +22,22 @@ $app->register(new TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
 ));
 
-$app['pomm.service'] = $app->share(function() use ($app) {
-    return new Pomm\Service($app['config']['pomm']);
+$app->register(new SessionServiceProvider());
+$app->register(new SecurityServiceProvider());
+
+$app->register(new PommServiceProvider(), array(
+    'pomm.class_path' => __DIR__ . '/vendor/pomm',
+    'pomm.databases' => $app['config']['pomm'],
+));
+
+$app['database'] = $app->share(function() use($app) {
+    return $app['pomm']->getDatabase()
+        ->registerConverter('source', new Model\Converter\Source(), array('public.source', 'source'));
 });
 
-$app['pomm'] = function() use ($app) {
-    return $app['pomm.service']->getDatabase()
-        ->registerConverter('source', new Model\Converter\Source(), array('public.source', 'source'))
-        ->createConnection();
-};
+$app['connection'] = $app->share(function() use($app) {
+    return $app['database']->getConnection();
+});
 
 $app['geshi'] = function() use ($app) {
     return new GeSHi();
