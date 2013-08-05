@@ -1,3 +1,3 @@
 # Code paste
 
-[![Build Status](https://travis-ci.org/sanpii/code-paste.png)](https://travis-ci.org/sanpii/code-paste)
+[![Build Status](https://ci.homecomputing.fr/code-paste/build/status)](https://ci.homecomputing.fr/code-paste)
