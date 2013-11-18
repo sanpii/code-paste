@@ -31,13 +31,24 @@ $app->register(new PommServiceProvider(), array(
 ));
 
 $app['database'] = $app->share(function() use($app) {
-    return $app['pomm']->getDatabase()
-        ->registerConverter('source', new Model\Converter\Source(), array('public.source', 'source'));
+    return $app['pomm']->getDatabase();
 });
 
 $app['connection'] = $app->share(function() use($app) {
     return $app['database']->getConnection();
 });
+
+$converter = new \Pomm\Converter\PgRow(
+    $app['database'],
+    new \Pomm\Object\RowStructure([
+        'name' => 'varchar',
+        'content' => 'text',
+        'language' => 'varchar',
+    ]),
+    '\Model\Type\Source'
+);
+
+$app['database']->registerConverter('Source', $converter, ['public.source', 'source']);
 
 $app['geshi'] = function() use ($app) {
     return new GeSHi();

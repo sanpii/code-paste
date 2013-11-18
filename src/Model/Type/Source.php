@@ -2,16 +2,11 @@
 
 namespace Model\Type;
 
-class Source
+use \Pomm\Type\Composite;
+
+class Source extends Composite
 {
     public $name;
     public $content;
     public $language;
-
-    public function __construct($name, $content, $language)
-    {
-        $this->name = $name;
-        $this->content = $content;
-        $this->language = $language;
-    }
 }
