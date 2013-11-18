@@ -57,7 +57,7 @@ EOD;
         if (!empty($tokens['tags'])) {
             $where->andWhere(
                 'keywords @> $*',
-                array('{' . implode(', ', $tokens['tags']) . '}')
+                ['{' . implode(', ', $tokens['tags']) . '}']
             );
         }
 
@@ -77,7 +77,7 @@ EOD;
             foreach ($values as $value) {
                 $where->andWhere(
                     'LOWER(' . $field . ') = LOWER($*)',
-                    array($value)
+                    [$value]
                 );
             }
         }

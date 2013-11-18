@@ -4,11 +4,11 @@ class QueryParser
 {
     public function parse($query)
     {
-        $tokens = array(
-            'keywords' => array(),
-            'tags' => array(),
-            'fields' => array(),
-        );
+        $tokens = [
+            'keywords' => [],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $regex = '["|\[].*?["|\]]|[^\s]+';
         preg_match_all("#$regex#", $query, $matches, PREG_SET_ORDER);

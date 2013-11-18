@@ -14,11 +14,11 @@ class QueryParser extends \atoum
 
     public function testNull()
     {
-        $expected = array(
-            'keywords' => array(),
-            'tags' => array(),
-            'fields' => array(),
-        );
+        $expected = [
+            'keywords' => [],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -29,11 +29,11 @@ class QueryParser extends \atoum
 
     public function testEmpty()
     {
-        $expected = array(
-            'keywords' => array(),
-            'tags' => array(),
-            'fields' => array(),
-        );
+        $expected = [
+            'keywords' => [],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -44,13 +44,13 @@ class QueryParser extends \atoum
 
     public function testSimple()
     {
-        $expected = array(
-            'keywords' => array(
+        $expected = [
+            'keywords' => [
                 'query',
-            ),
-            'tags' => array(),
-            'fields' => array(),
-        );
+            ],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -61,14 +61,14 @@ class QueryParser extends \atoum
 
     public function testMultiple()
     {
-        $expected = array(
-            'keywords' => array(
+        $expected = [
+            'keywords' => [
                 'query',
                 'search',
-            ),
-            'tags' => array(),
-            'fields' => array(),
-        );
+            ],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -79,13 +79,13 @@ class QueryParser extends \atoum
 
     public function testExact()
     {
-        $expected = array(
-            'keywords' => array(
+        $expected = [
+            'keywords' => [
                 'query search',
-            ),
-            'tags' => array(),
-            'fields' => array(),
-        );
+            ],
+            'tags' => [],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -96,13 +96,13 @@ class QueryParser extends \atoum
 
     public function testTags()
     {
-        $expected = array(
-            'keywords' => array(),
-            'tags' => array(
+        $expected = [
+            'keywords' => [],
+            'tags' => [
                 'php',
-            ),
-            'fields' => array(),
-        );
+            ],
+            'fields' => [],
+        ];
 
         $parser = new \QueryParser();
 
@@ -113,13 +113,13 @@ class QueryParser extends \atoum
 
     public function testFields()
     {
-        $expected = array(
-            'keywords' => array(),
-            'tags' => array(),
-            'fields' => array(
-                'title' => array('debug'),
-            ),
-        );
+        $expected = [
+            'keywords' => [],
+            'tags' => [],
+            'fields' => [
+                'title' => ['debug'],
+            ],
+        ];
 
         $parser = new \QueryParser();
 
@@ -130,21 +130,21 @@ class QueryParser extends \atoum
 
     public function testAll()
     {
-        $expected = array(
-            'keywords' => array(
+        $expected = [
+            'keywords' => [
                 'search query',
                 'debug',
                 'phpinfo',
-            ),
-            'tags' => array(
+            ],
+            'tags' => [
                 'php',
                 'xdebug 2',
-            ),
-            'fields' => array(
-                'title' => array('php debug'),
-                'filename' => array('test.php', 'bootstrap.php'),
-            ),
-        );
+            ],
+            'fields' => [
+                'title' => ['php debug'],
+                'filename' => ['test.php', 'bootstrap.php'],
+            ],
+        ];
 
         $parser = new \QueryParser();
 

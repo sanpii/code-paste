@@ -18,18 +18,18 @@ $app['config'] = require __DIR__ . '/config/current.php';
 
 $app['debug'] = $app['config']['debug'];
 
-$app->register(new TwigServiceProvider(), array(
+$app->register(new TwigServiceProvider(), [
     'twig.path' => __DIR__ . '/views',
-));
+]);
 
 $databaseConfig = $app['config']['pomm'];
 foreach ($databaseConfig as $name => $values) {
     $databaseConfig[$name]['class'] = '\Model\Database';
 }
-$app->register(new PommServiceProvider(), array(
+$app->register(new PommServiceProvider(), [
     'pomm.class_path' => __DIR__ . '/vendor/pomm',
     'pomm.databases' => $databaseConfig,
-));
+]);
 
 $app['geshi'] = function() use ($app) {
     return new GeSHi();
@@ -40,9 +40,9 @@ if (class_exists('\Silex\Provider\WebProfilerServiceProvider')) {
     $app->register(new ServiceControllerServiceProvider());
 
     $profiler = new WebProfilerServiceProvider();
-    $app->register($profiler, array(
+    $app->register($profiler, [
         'profiler.cache_dir' => __DIR__ . '/../cache/profiler',
-    ));
+    ]);
     $app->mount('/_profiler', $profiler);
 }
 

@@ -15,10 +15,10 @@ $must_be_logged = function() use($app) {
     }
     else {
         $author = $app['pomm.connection']->getMapFor('\Model\Author')
-            ->findWhere('name = ? AND password = ?', array(
+            ->findWhere('name = ? AND password = ?', [
                 $_SERVER['PHP_AUTH_USER'],
                 hash('sha512', $_SERVER['PHP_AUTH_PW']),
-            ))
+            ])
             ->current();
         if($author !== false) {
             $app['user'] = $author;
@@ -46,16 +46,16 @@ $app->get('/search', function(Request $request) use($app) {
 
     return $app['twig']->render(
         'search.html.twig',
-        array(
+        [
             'pager' => $pager,
             'q' => $query,
-        )
+        ]
     );
 });
 
 $app->get('/show/{id}', function($id) use($app) {
     $snippet = $app['pomm.connection']->getMapFor('\Model\Snippet')
-        ->findByPk(array('id' => $id));
+        ->findByPk(compact('id'));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
     }
@@ -69,9 +69,9 @@ $app->get('/show/{id}', function($id) use($app) {
 
     return $app['twig']->render(
         'show.html.twig',
-        array(
+        [
             'snippet' => $snippet->extract(),
-        )
+        ]
     );
 });
 
@@ -93,33 +93,33 @@ $app->get('/edit/{id}', function($id) use($app) {
     $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
 
     if ($id > 0) {
-        $snippet = $map->findByPk(array('id' => $id));
+        $snippet = $map->findByPk(compact('id'));
         if (is_null($snippet)) {
             $app->abort(404, "Snippet $id not found");
         }
     }
     else {
-        $snippet = $map->createObject(array(
+        $snippet = $map->createObject([
             'title' => '',
-            'codes' => array(),
-            'keywords' => array(),
-        ));
+            'codes' => [],
+            'keywords' => [],
+        ]);
     }
 
     $data = $snippet->extract();
     $data['keywords'][] = '';
-    $data['codes'][] = array(
+    $data['codes'][] = [
         'name' => '',
         'content' => '',
         'language' => 'text',
-    );
+    ];
 
     return $app['twig']->render(
         'edit.html.twig',
-        array(
+        [
             'snippet' => $data,
             'languages' => $app['geshi']->get_supported_languages(true),
-        )
+        ]
     );
 })->before($must_be_logged);
 
@@ -127,7 +127,7 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
     $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
 
     if ($id > 0) {
-        $snippet = $map->findByPk(array('id' => $id));
+        $snippet = $map->findByPk(compact('id'));
         if (is_null($snippet)) {
             $app->abort(404, "Snippet $id not found");
         }
@@ -145,23 +145,23 @@ $app->put('/edit/{id}', function(Request $request, $id) use($app) {
 
 $app->get('/delete/{id}', function($id) use($app) {
     $snippet = $app['pomm.connection']->getMapFor('\Model\Snippet')
-        ->findByPk(array('id' => $id));
+        ->findByPk(compact('id'));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
     }
 
     return $app['twig']->render(
         'delete.html.twig',
-        array(
+        [
             'snippet' => $snippet->extract(),
-        )
+        ]
     );
 })->before($must_be_logged);
 
 $app->delete('/delete/{id}', function($id) use($app) {
     $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
 
-    $snippet = $map->findByPk(array('id' => $id));
+    $snippet = $map->findByPk(compact('id'));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
     }
@@ -176,14 +176,14 @@ $app->get('/opensearch.xml', function(Request $request) use($app) {
 
     $contents = $app['twig']->render(
         'opensearch.xml.twig',
-        array(
+        [
             'baseurl' => $baseurl,
-        )
+        ]
     );
 
-    return new Response($contents, 200, array(
+    return new Response($contents, 200, [
         'Content-Type' => 'application/xml',
-    ));
+    ]);
 });
 
 return $app;

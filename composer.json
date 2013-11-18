@@ -2,6 +2,7 @@
     "name": "sanpi/cifs",
     "license": "MIT",
     "require": {
+        "php": ">=5.4",
         "silex/silex": "1.1.*",
         "pomm/pomm-service-provider": "*@dev",
         "twig/twig": "*",
