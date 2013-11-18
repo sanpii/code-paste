@@ -22,9 +22,6 @@ $app->register(new TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
 ));
 
-$app->register(new SessionServiceProvider());
-$app->register(new SecurityServiceProvider());
-
 $app->register(new PommServiceProvider(), array(
     'pomm.class_path' => __DIR__ . '/vendor/pomm',
     'pomm.databases' => $app['config']['pomm'],
