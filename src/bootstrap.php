@@ -22,9 +22,13 @@ $app->register(new TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/views',
 ));
 
+$databaseConfig = $app['config']['pomm'];
+foreach ($databaseConfig as $name => $values) {
+    $databaseConfig[$name]['class'] = '\Model\Database';
+}
 $app->register(new PommServiceProvider(), array(
     'pomm.class_path' => __DIR__ . '/vendor/pomm',
-    'pomm.databases' => $app['config']['pomm'],
+    'pomm.databases' => $databaseConfig,
 ));
 
 $app['database'] = $app->share(function() use($app) {
@@ -34,18 +38,6 @@ $app['database'] = $app->share(function() use($app) {
 $app['connection'] = $app->share(function() use($app) {
     return $app['database']->getConnection();
 });
-
-$converter = new \Pomm\Converter\PgRow(
-    $app['database'],
-    new \Pomm\Object\RowStructure([
-        'name' => 'varchar',
-        'content' => 'text',
-        'language' => 'varchar',
-    ]),
-    '\Model\Type\Source'
-);
-
-$app['database']->registerConverter('Source', $converter, ['public.source', 'source']);
 
 $app['geshi'] = function() use ($app) {
     return new GeSHi();
