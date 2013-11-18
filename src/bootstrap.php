@@ -31,14 +31,6 @@ $app->register(new PommServiceProvider(), array(
     'pomm.databases' => $databaseConfig,
 ));
 
-$app['database'] = $app->share(function() use($app) {
-    return $app['pomm']->getDatabase();
-});
-
-$app['connection'] = $app->share(function() use($app) {
-    return $app['database']->getConnection();
-});
-
 $app['geshi'] = function() use ($app) {
     return new GeSHi();
 };
