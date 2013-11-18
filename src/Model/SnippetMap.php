@@ -49,14 +49,14 @@ EOD;
 
         foreach ($tokens['keywords'] as $keyword) {
             $where->andWhere(
-                '(title ILIKE ? OR (unnest_codes.code).name ILIKE ? OR (unnest_codes.code).content ILIKE ?)',
+                '(title ILIKE $* OR (unnest_codes.code).name ILIKE $* OR (unnest_codes.code).content ILIKE $*)',
                 array_fill(0, 3, "%$keyword%")
             );
         }
 
         if (!empty($tokens['tags'])) {
             $where->andWhere(
-                'keywords @> ?',
+                'keywords @> $*',
                 array('{' . implode(', ', $tokens['tags']) . '}')
             );
         }
@@ -76,7 +76,7 @@ EOD;
 
             foreach ($values as $value) {
                 $where->andWhere(
-                    'LOWER(' . $field . ') = LOWER(?)',
+                    'LOWER(' . $field . ') = LOWER($*)',
                     array($value)
                 );
             }

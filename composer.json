@@ -5,6 +5,7 @@
         "silex/silex": "1.1.*",
         "pomm/pomm-service-provider": "*@dev",
         "twig/twig": "*",
+        "pomm/pomm": "1.2.*@rc",
         "sanpi/twitter-bootstrap-installer": "*@dev",
         "easybook/geshi": "*"
     },
