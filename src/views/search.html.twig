@@ -1,23 +1,25 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <a href="/add" class="btn">Add</a>
+    <a href="/add" class="btn btn-default">Add</a>
 
     <div id="search" class="control-group">
         <div class="controls">
             <div class="input-append">
                 <form method="get" action="/search">
-                    <input class="span4" name="q" type="text" placeholder="Search…" value="{{ q }}" />
+                    <div class="input-group">
+                        <input class="span4 form-control" name="q" type="search" placeholder="Search…" value="{{ q }}" />
+                        <span class="input-group-addon"><a href="#" class="icon-search" rel="popover"> </a></span>
+                    </div>
                     <div class="help">
-                        <ul class="unstyled">
-                            <li><span class="muted">word</span> search a word in the title or in the code</li>
-                            <li><span class="muted">[tag]</span> search a specific tag</li>
-                            <li><span class="muted">"word here"</span> search exact words</li>
-                            <li><span class="muted">code:strlen"</span> search word in the code</li>
-                            <li><span class="muted">"title:create a file"</span> search exact words in the title</li>
+                        <ul class="list-unstyled">
+                            <li><p><span class="text-muted">word</span> search a word in the title or in the code</p></li>
+                            <li><p><span class="text-muted">[tag]</span> search a specific tag</p></li>
+                            <li><p><span class="text-muted">"word here"</span> search exact words</p></li>
+                            <li><p><span class="text-muted">code:strlen"</span> search word in the code</p></li>
+                            <li><p><span class="text-muted">"title:create a file"</span> search exact words in the title</p></li>
                         </ul>
                     </div>
-                    <span class="add-on"><a href="#" class="icon-search" rel="popover"> </a></span>
                 </form>
             </div>
         </div>
@@ -25,7 +27,7 @@
 
     <div class="snippets">
         {% if pager.getCount() > 0 %}
-            <ul>
+            <ul class="list-unstyled">
                 {% for snippet in pager.collection %}
                     <li>
                         <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
@@ -47,8 +49,8 @@
     </div>
 
     <script src="/js/jquery.js"></script>
-    <script src="/js/bootstrap-tooltip.js"></script>
-    <script src="/js/bootstrap-popover.js"></script>
+    <script src="/js/tooltip.js"></script>
+    <script src="/js/popover.js"></script>
 
     <script type="text/javascript">
         $("[rel=popover]").popover({

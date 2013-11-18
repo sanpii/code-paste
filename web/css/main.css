@@ -38,11 +38,6 @@ li .tags {
     margin-top: 20px;
 }
 
-.snippets > ul {
-    list-style-type: none;
-    margin-left: 0;
-}
-
 .snippets > ul > li {
     padding: 10px 10px;
     margin: 10px 0;
@@ -64,6 +59,10 @@ li .tags {
 
 #search .help {
     display: none;
+}
+
+#search .popover {
+    width: 260px;
 }
 
 .snippet-codes input[name="snippet[title]"] {

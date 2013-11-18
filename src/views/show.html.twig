@@ -19,7 +19,7 @@
 
         {% for key, code in snippet.codes %}
             <pre class="snippet-code">
-<h3 id="file-{{ key + 1 }}">{{ code.name }} <a href="#file-{{ key + 1 }}" title="link" class="icon-link"> </a></h3>
+<h3 id="file-{{ key + 1 }}">{{ code.name }} <a href="#file-{{ key + 1 }}" title="link" class="icon-link"> </a></h3>
 {{ code.source|raw }}</pre>
         {% endfor %}
     </div>
