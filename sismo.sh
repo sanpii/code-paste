@@ -22,3 +22,6 @@ wget -q http://getcomposer.org/installer -O - | php;
 cp behat.yml{-dist,}
 
 ./bin/atoum && ./bin/behat
+
+# Cleanup
+rm -rf composer.lock vendor
