@@ -2,11 +2,8 @@
 
 namespace Model\Type;
 
-use \Pomm\Type\Composite;
+use \PommProject\ModelManager\Model\FlexibleEntity;
 
-class Source extends Composite
+class Source extends FlexibleEntity
 {
-    public $name;
-    public $content;
-    public $language;
 }
