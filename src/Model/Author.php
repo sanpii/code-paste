@@ -2,9 +2,6 @@
 
 namespace Model;
 
-use \Pomm\Object\BaseObject;
-use \Pomm\Exception\Exception;
-
-class Author extends BaseObject
+class Author extends Base\AuthorModel
 {
 }
