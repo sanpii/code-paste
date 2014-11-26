@@ -4,9 +4,11 @@
     "require": {
         "php": ">=5.4",
         "silex/silex": "1.1.*",
-        "pomm/pomm-service-provider": "*@dev",
+        "pomm-project/pomm-service-provider": "*@dev",
         "twig/twig": "*",
-        "pomm/pomm": "1.2.*@rc",
+        "pomm-project/cli": "*@dev",
+        "pomm-project/foundation": "*@dev",
+        "pomm-project/model-manager": "*@dev",
         "sanpi/twitter-bootstrap-installer": "*@dev",
         "easybook/geshi": "*"
     },
