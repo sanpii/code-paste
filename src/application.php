@@ -6,6 +6,17 @@ use \Symfony\Component\HttpKernel\HttpKernelInterface;
 
 $app = require __DIR__ . '/bootstrap.php';
 
+function preSave(FlexibleEntity &$entity)
+{
+    $object->keywords = array_filter($object->keywords, function($keyword) {
+        return !empty($keyword);
+    });
+
+    $object->codes = array_filter($object->codes, function($code) {
+        return !empty($code['content']);
+    });
+}
+
 $must_be_logged = function() use($app) {
     $response = null;
 
@@ -14,8 +25,8 @@ $must_be_logged = function() use($app) {
         $response =  $app->abort(401, 'Not Authorised');
     }
     else {
-        $author = $app['pomm.connection']->getMapFor('\Model\Author')
-            ->findWhere('name = ? AND password = ?', [
+        $author = $app['db']->getModel('\Model\AuthorModel')
+            ->findWhere('name = $* AND password = $*', [
                 $_SERVER['PHP_AUTH_USER'],
                 hash('sha512', $_SERVER['PHP_AUTH_PW']),
             ])
@@ -41,7 +52,7 @@ $app->get('/search', function(Request $request) use($app) {
     $page = $request->get('page', 1);
     $query = $request->get('q', '');
 
-    $pager = $app['pomm.connection']->getMapFor('\Model\Snippet')
+    $pager = $app['db']->getModel('\Model\SnippetModel')
         ->search($query, 25, $page);
 
     return $app['twig']->render(
@@ -54,7 +65,7 @@ $app->get('/search', function(Request $request) use($app) {
 });
 
 $app->get('/show/{id}', function($id) use($app) {
-    $snippet = $app['pomm.connection']->getMapFor('\Model\Snippet')
+    $snippet = $app['db']->getModel('\Model\SnippetModel')
         ->findByPk(compact('id'));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
@@ -90,7 +101,7 @@ $app->post('/add', function(Request $request) use($app) {
 })->before($must_be_logged);
 
 $app->get('/edit/{id}', function($id) use($app) {
-    $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
+    $map = $app['db']->getModel('\Model\SnippetModel');
 
     if ($id > 0) {
         $snippet = $map->findByPk(compact('id'));
@@ -99,7 +110,7 @@ $app->get('/edit/{id}', function($id) use($app) {
         }
     }
     else {
-        $snippet = $map->createObject([
+        $snippet = $map->createEntity([
             'title' => '',
             'codes' => [],
             'keywords' => [],
@@ -124,27 +135,26 @@ $app->get('/edit/{id}', function($id) use($app) {
 })->before($must_be_logged);
 
 $app->put('/edit/{id}', function(Request $request, $id) use($app) {
-    $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
+    $map = $app['db']->getModel('\Model\SnippetModel');
+    $data = $request->request->get('snippet');
 
     if ($id > 0) {
         $snippet = $map->findByPk(compact('id'));
         if (is_null($snippet)) {
             $app->abort(404, "Snippet $id not found");
         }
+        $map->updateByPk(['id' => $snippet->id], $data);
     }
     else {
-        $snippet = $map->createObject();
-        $snippet->author_id = $app['user']->id;
+        $data['author_id'] = $app['user']->id;
+        $snippet = $map->createAndSave($data);
     }
-
-    $snippet->hydrate($request->request->get('snippet'));
-    $map->saveOne($snippet);
 
     return $app->redirect("/show/{$snippet->id}");
 })->before($must_be_logged);
 
 $app->get('/delete/{id}', function($id) use($app) {
-    $snippet = $app['pomm.connection']->getMapFor('\Model\Snippet')
+    $snippet = $app['db']->getModel('\Model\SnippetModel')
         ->findByPk(compact('id'));
     if (is_null($snippet)) {
         $app->abort(404, "Snippet $id not found");
@@ -159,7 +169,7 @@ $app->get('/delete/{id}', function($id) use($app) {
 })->before($must_be_logged);
 
 $app->delete('/delete/{id}', function($id) use($app) {
-    $map = $app['pomm.connection']->getMapFor('\Model\Snippet');
+    $map = $app['db']->getModel('\Model\SnippetModel');
 
     $snippet = $map->findByPk(compact('id'));
     if (is_null($snippet)) {
