@@ -26,9 +26,9 @@
     </div>
 
     <div class="snippets">
-        {% if pager.getCount() > 0 %}
+        {% if pager.count > 0 %}
             <ul class="list-unstyled">
-                {% for snippet in pager.collection %}
+                {% for snippet in pager.iterator %}
                     <li>
                         <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
                         <ul class="tags">
