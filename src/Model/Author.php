@@ -2,6 +2,6 @@
 
 namespace Model;
 
-class Author extends Base\AuthorModel
+class Author extends Base\Author
 {
 }

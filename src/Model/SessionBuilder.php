@@ -19,6 +19,6 @@ class SessionBuilder extends BaseSessionBuilder
         $converter_holder->registerConverter(
             'Source',
             new PgEntity('\Model\Type\Source', new Source),
-            ['public.source', 'source']);
+            ['public.source']);
     }
 }
