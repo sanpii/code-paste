@@ -5,6 +5,7 @@ use \Silex\Provider\WebProfilerServiceProvider;
 use \Silex\Provider\UrlGeneratorServiceProvider;
 use \Silex\Provider\ServiceControllerServiceProvider;
 use \PommProject\Silex\ServiceProvider\PommServiceProvider;
+use \PommProject\Silex\ProfilerServiceProvider\PommProfilerServiceProvider;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -37,15 +38,16 @@ $app['geshi'] = function() use ($app) {
     return new GeSHi();
 };
 
-if (!class_exists('\Silex\Provider\WebProfilerServiceProvider')) {
-    $app->register(new UrlGeneratorServiceProvider());
-    $app->register(new ServiceControllerServiceProvider());
+if (class_exists('\Silex\Provider\WebProfilerServiceProvider')) {
+    $app->register(new UrlGeneratorServiceProvider);
+    $app->register(new ServiceControllerServiceProvider);
 
     $profiler = new WebProfilerServiceProvider();
     $app->register($profiler, [
         'profiler.cache_dir' => __DIR__ . '/../cache/profiler',
     ]);
     $app->mount('/_profiler', $profiler);
+    $app->register(new PommProfilerServiceProvider);
 }
 
 return $app;
