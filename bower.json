@@ -1,0 +1,7 @@
+{
+    "name": "sanpi/spore",
+    "dependencies": {
+        "bootstrap": "~3.0",
+        "fontawesome": "~4.7"
+    }
+}

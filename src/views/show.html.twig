@@ -4,13 +4,13 @@
     <div class="snippet">
         <h2>
             <a href="/show/{{ snippet.id }}">{{ snippet.title }}</a>
-            <a href="/edit/{{ snippet.id }}" title="Edit"><i class="icon-edit"> </i></a>
-            <a href="/delete/{{ snippet.id }}" title="Delete"><i class="icon-remove"> </i></a>
+            <a href="/edit/{{ snippet.id }}" title="Edit"><i class="fa fa-edit"> </i></a>
+            <a href="/delete/{{ snippet.id }}" title="Delete"><i class="fa fa-remove"> </i></a>
         </h2>
 
         {% if snippet.keywords is not empty %}
             <ul class="tags">
-                <li><i title="Keywords" class="icon-tag"> </i></li>
+                <li><i title="Keywords" class="fa fa-tag"> </i></li>
                 {% for keyword in snippet.keywords %}
                     <li><a href="/search?q=[{{ keyword }}]" class="label label-info">{{ keyword }}</a></li>
                 {% endfor %}
@@ -19,7 +19,7 @@
 
         {% for key, code in snippet.codes %}
             <pre class="snippet-code">
-<h3 id="file-{{ key + 1 }}">{{ code.name }} <a href="#file-{{ key + 1 }}" title="link" class="icon-link"> </a></h3>
+<h3 id="file-{{ key + 1 }}">{{ code.name }} <a href="#file-{{ key + 1 }}" title="link" class="fa fa-link"> </a></h3>
 {{ code.source|raw }}</pre>
         {% endfor %}
     </div>

@@ -9,7 +9,7 @@
                 <form method="get" action="/search">
                     <div class="input-group">
                         <input class="span4 form-control" name="q" type="search" placeholder="Search…" value="{{ q }}" />
-                        <span class="input-group-addon"><a href="#" class="icon-search" rel="popover"> </a></span>
+                        <span class="input-group-addon"><a href="#" class="fa fa-search" rel="popover"> </a></span>
                     </div>
                     <div class="help">
                         <ul class="list-unstyled">
@@ -48,9 +48,8 @@
         {% endif %}
     </div>
 
-    <script src="/js/jquery.js"></script>
-    <script src="/js/tooltip.js"></script>
-    <script src="/js/popover.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
         $("[rel=popover]").popover({

@@ -5,6 +5,4 @@
 /composer.phar
 /src/config/current.php
 /vendor/
-/web/css/bootstrap.css
-/web/fonts/
-/web/js/bootstrap/
+/web/lib/
