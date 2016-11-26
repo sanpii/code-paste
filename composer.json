@@ -3,18 +3,19 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4",
-        "silex/silex": "1.1.*",
-        "pomm/pomm-service-provider": "*@dev",
-        "twig/twig": "*",
-        "pomm/pomm": "1.2.*@rc",
+        "silex/silex": "~2.0",
+        "twig/twig": "~1.18",
+        "pomm-project/model-manager": "~2.0",
+        "pomm-project/pomm-service-provider": "dev-silex-2",
         "sanpi/twitter-bootstrap-installer": "*@dev",
         "easybook/geshi": "*"
     },
     "require-dev": {
-        "silex/web-profiler": "*@dev",
-        "atoum/atoum": "*@dev",
-        "sanpi/behatch-contexts": "*@dev",
-        "behat/mink-goutte-driver": "*"
+        "pomm-project/cli": "~2.0",
+        "atoum/atoum": "~2.0",
+        "behatch/contexts": "~2.0",
+        "behat/mink-goutte-driver": "*",
+        "pomm-project/pomm-profiler-service-provider": "dev-silex-2"
     },
     "scripts": {
         "post-install-cmd": "Sanpi\\TwitterBootstrap\\Composer\\ScriptHandler::postInstall",
